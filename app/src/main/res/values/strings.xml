@@ -1,3 +1,49 @@
 <resources>
-    <string name="app_name">act1sem7</string>
+    <string name="app_name">PROYECTOSQLITE0002</string>
+    <string name="app_subtitle">UPN - Desarrollo de Aplicaciones Móviles</string>
+    
+    <!-- Formulario / Main Activity -->
+    <string name="titulo_formulario">REGISTRO DE PERSONA</string>
+    <string name="titulo_edicion">MODIFICAR PERSONA</string>
+    <string name="subtitulo_formulario">Ingrese los datos para gestionar en SQLite</string>
+    <string name="label_codigo">Código: %1$d</string>
+    <string name="label_nombre">Nombre</string>
+    <string name="label_apellido">Apellido</string>
+    <string name="label_dni">DNI</string>
+    <string name="hint_nombre">Ej. Ivan</string>
+    <string name="hint_apellido">Ej. Petrlik</string>
+    <string name="hint_dni">8 dígitos numéricos</string>
+    
+    <string name="btn_grabar">GRABAR</string>
+    <string name="btn_registrar">REGISTRAR</string>
+    <string name="btn_mostrar_registros">MOSTRAR REGISTROS</string>
+    <string name="btn_actualizar">ACTUALIZAR REGISTRO</string>
+    <string name="btn_limpiar">LIMPIAR CAMPOS</string>
+    <string name="btn_cancelar">CANCELAR EDICIÓN</string>
+    
+    <!-- Reporte General / Activity 2 -->
+    <string name="titulo_reporte_general">REPORTE GENERAL</string>
+    <string name="subtitulo_reporte">Listado de registros almacenados en SQLite</string>
+    <string name="btn_regresar">REGRESAR</string>
+    <string name="hint_buscar">Buscar por nombre, apellido o DNI...</string>
+    <string name="contador_registros">Total de registros: %1$d</string>
+    <string name="sin_registros">No se encontraron personas registradas</string>
+    <string name="sin_registros_desc">Utilice el formulario de registro para agregar personas a la base de datos SQLite.</string>
+    
+    <!-- Mensajes y Validaciones -->
+    <string name="error_campo_vacio">Este campo no puede estar vacío</string>
+    <string name="error_nombre_invalido">El nombre debe tener al menos 2 letras</string>
+    <string name="error_apellido_invalido">El apellido debe tener al menos 2 letras</string>
+    <string name="error_dni_invalido">El DNI debe contener exactamente 8 dígitos numéricos</string>
+    <string name="error_dni_duplicado">Ya existe una persona registrada con este DNI</string>
+    <string name="msg_registro_exitoso">¡Persona registrada exitosamente!</string>
+    <string name="msg_actualizacion_exitosa">¡Registro actualizado correctamente!</string>
+    <string name="msg_eliminacion_exitosa">¡Registro eliminado correctamente!</string>
+    <string name="msg_error_operacion">Ocurrió un error al procesar la operación en SQLite</string>
+    
+    <!-- Diálogo de Confirmación -->
+    <string name="dialog_eliminar_titulo">Confirmar Eliminación</string>
+    <string name="dialog_eliminar_mensaje">¿Está seguro de que desea eliminar permanentemente a %1$s %2$s (DNI: %3$s)?</string>
+    <string name="dialog_eliminar_positivo">Eliminar</string>
+    <string name="dialog_eliminar_negativo">Cancelar</string>
 </resources>

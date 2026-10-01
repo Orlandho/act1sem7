@@ -1,0 +1,95 @@
+classDiagram
+    direction TB
+
+    class MainActivity {
+        -binding: ActivityMainBinding
+        -personaDAO: PersonaDAO
+        -personaEnEdicion: Persona
+        -launcherReporte: ActivityResultLauncher
+        +onCreate(savedInstanceState: Bundle): void
+        +procesarGuardado(): void
+        +activarModoEdicion(persona: Persona): void
+        +cancelarModoEdicion(): void
+        +limpiarFormulario(): void
+        +actualizarContador(): void
+    }
+
+    class ReporteGeneralActivity {
+        -binding: ActivityReporteGeneralBinding
+        -personaDAO: PersonaDAO
+        -adapter: PersonaAdapter
+        -listaPersonas: ArrayList~Persona~
+        +onCreate(savedInstanceState: Bundle): void
+        +configurarRecyclerView(): void
+        +configurarBuscador(): void
+        +cargarDatos(): void
+        +editarPersona(persona: Persona): void
+        +confirmarEliminacion(persona: Persona, position: int): void
+    }
+
+    class PersonaAdapter {
+        -listaPersonas: ArrayList~Persona~
+        -onEditarClick: Function
+        -onEliminarClick: Function
+        -onItemClick: Function
+        +onCreateViewHolder(parent: ViewGroup, viewType: int): PersonaViewHolder
+        +onBindViewHolder(holder: PersonaViewHolder, position: int): void
+        +getItemCount(): int
+        +actualizarLista(nuevaLista: List~Persona~): void
+        +eliminarItem(posicion: int): void
+    }
+
+    class Persona {
+        +codigo: int
+        +nombre: String
+        +apellido: String
+        +dni: String
+        +nombreCompleto: String
+        +toString(): String
+    }
+
+    class PersonaDAO {
+        -dbHelper: MySQLiteHelper
+        -database: SQLiteDatabase
+        +open(): PersonaDAO
+        +close(): void
+        +insertarPersona(persona: Persona): long
+        +modificarPersona(persona: Persona): int
+        +eliminarPersona(codigo: int): int
+        +listarPersonas(): ArrayList~Persona~
+        +filtrarPersonas(criterio: String): ArrayList~Persona~
+        +buscarPorId(codigo: int): Persona
+        +existeDni(dni: String, excluirCodigo: int): boolean
+        +contarRegistros(): int
+    }
+
+    class MySQLiteHelper {
+        <<SQLiteOpenHelper>>
+        +NOMBREBASEDATOS: String
+        +VERSION: int
+        +NOMBRETABLA: String
+        +COL_CODIGO: String
+        +COL_NOMBRE: String
+        +COL_APELLIDO: String
+        +COL_DNI: String
+        +SQL_CREACION: String
+        +onCreate(database: SQLiteDatabase): void
+        +onUpgrade(db: SQLiteDatabase, antiguaversion: int, nuevaversion: int): void
+    }
+
+    class ValidationUtils {
+        <<utility>>
+        +isValidDni(dni: String): boolean
+        +isValidName(name: String): boolean
+        +validatePersonaFields(nombre: String, apellido: String, dni: String): Map
+    }
+
+    MainActivity --> PersonaDAO : utiliza
+    MainActivity ..> ReporteGeneralActivity : navega a
+    MainActivity ..> ValidationUtils : valida con
+    MainActivity ..> Persona : crea / actualiza
+    ReporteGeneralActivity --> PersonaDAO : consulta / elimina
+    ReporteGeneralActivity --> PersonaAdapter : maneja
+    PersonaAdapter --> Persona : presenta lista de
+    PersonaDAO --> MySQLiteHelper : gestiona conexión
+    PersonaDAO ..> Persona : transforma desde Cursor
