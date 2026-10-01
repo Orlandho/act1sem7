@@ -11,11 +11,13 @@ import com.example.act1sem7.model.Persona
  * Provee enlaces para eventos de edición, eliminación e inspección de cada registro.
  */
 class PersonaAdapter(
-    private var listaPersonas: ArrayList<Persona>,
+    listaInicial: List<Persona> = emptyList(),
     private val onEditarClick: (Persona) -> Unit,
     private val onEliminarClick: (Persona, Int) -> Unit,
     private val onItemClick: ((Persona) -> Unit)? = null
 ) : RecyclerView.Adapter<PersonaAdapter.PersonaViewHolder>() {
+
+    private val listaPersonas: ArrayList<Persona> = ArrayList(listaInicial)
 
     inner class PersonaViewHolder(val binding: ItemPersonaBinding) :
         RecyclerView.ViewHolder(binding.root)

@@ -12,7 +12,8 @@
     <string name="label_dni">DNI</string>
     <string name="hint_nombre">Ej. Ivan</string>
     <string name="hint_apellido">Ej. Petrlik</string>
-    <string name="hint_dni">8 dígitos numéricos</string>
+    <string name="hint_dni">6 a 8 dígitos numéricos</string>
+    <string name="grupo_descripcion">Actividad Semana 7 - Grupo de Desarrollo UPN</string>
     
     <string name="btn_grabar">GRABAR</string>
     <string name="btn_registrar">REGISTRAR</string>
@@ -34,7 +35,7 @@
     <string name="error_campo_vacio">Este campo no puede estar vacío</string>
     <string name="error_nombre_invalido">El nombre debe tener al menos 2 letras</string>
     <string name="error_apellido_invalido">El apellido debe tener al menos 2 letras</string>
-    <string name="error_dni_invalido">El DNI debe contener exactamente 8 dígitos numéricos</string>
+    <string name="error_dni_invalido">El DNI debe contener entre 6 y 8 dígitos numéricos</string>
     <string name="error_dni_duplicado">Ya existe una persona registrada con este DNI</string>
     <string name="msg_registro_exitoso">¡Persona registrada exitosamente!</string>
     <string name="msg_actualizacion_exitosa">¡Registro actualizado correctamente!</string>

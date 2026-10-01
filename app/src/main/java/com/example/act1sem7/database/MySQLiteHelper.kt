@@ -33,6 +33,9 @@ class MySQLiteHelper(context: Context) : SQLiteOpenHelper(
                 $COL_DNI TEXT NOT NULL
             );
         """
+
+        // Constante requerida textualmente por el modelamiento UML de la diapositiva 19 y 20
+        const val SQL: String = SQL_CREACION
     }
 
     override fun onCreate(database: SQLiteDatabase) {

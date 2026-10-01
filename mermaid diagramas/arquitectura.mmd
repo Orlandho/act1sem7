@@ -7,8 +7,9 @@ classDiagram
         -personaEnEdicion: Persona
         -launcherReporte: ActivityResultLauncher
         +onCreate(savedInstanceState: Bundle): void
+        +onSaveInstanceState(outState: Bundle): void
         +procesarGuardado(): void
-        +activarModoEdicion(persona: Persona): void
+        +activarModoEdicion(persona: Persona, restaurarCamposTexto: boolean): void
         +cancelarModoEdicion(): void
         +limpiarFormulario(): void
         +actualizarContador(): void
@@ -18,7 +19,6 @@ classDiagram
         -binding: ActivityReporteGeneralBinding
         -personaDAO: PersonaDAO
         -adapter: PersonaAdapter
-        -listaPersonas: ArrayList~Persona~
         +onCreate(savedInstanceState: Bundle): void
         +configurarRecyclerView(): void
         +configurarBuscador(): void
@@ -51,12 +51,18 @@ classDiagram
     class PersonaDAO {
         -dbHelper: MySQLiteHelper
         -database: SQLiteDatabase
+        +lista: ArrayList~Persona~
         +open(): PersonaDAO
         +close(): void
         +insertarPersona(persona: Persona): long
         +modificarPersona(persona: Persona): int
         +eliminarPersona(codigo: int): int
+        +eliminarPersona(persona: Persona): int
         +listarPersonas(): ArrayList~Persona~
+        +InsertarPersona(persona: Persona): long
+        +ModificarPersona(persona: Persona): int
+        +EliminarPersona(persona: Persona): int
+        +ListarPersonas(): ArrayList~Persona~
         +filtrarPersonas(criterio: String): ArrayList~Persona~
         +buscarPorId(codigo: int): Persona
         +existeDni(dni: String, excluirCodigo: int): boolean
@@ -73,6 +79,7 @@ classDiagram
         +COL_APELLIDO: String
         +COL_DNI: String
         +SQL_CREACION: String
+        +SQL: String
         +onCreate(database: SQLiteDatabase): void
         +onUpgrade(db: SQLiteDatabase, antiguaversion: int, nuevaversion: int): void
     }

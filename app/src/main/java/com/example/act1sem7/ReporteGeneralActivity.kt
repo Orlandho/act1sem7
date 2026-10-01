@@ -25,7 +25,6 @@ class ReporteGeneralActivity : AppCompatActivity() {
     private lateinit var binding: ActivityReporteGeneralBinding
     private lateinit var personaDAO: PersonaDAO
     private lateinit var adapter: PersonaAdapter
-    private var listaPersonas = ArrayList<Persona>()
 
     companion object {
         const val EXTRA_EDITAR_PERSONA = "extra_editar_persona"
@@ -70,7 +69,7 @@ class ReporteGeneralActivity : AppCompatActivity() {
 
     private fun configurarRecyclerView() {
         adapter = PersonaAdapter(
-            listaPersonas = listaPersonas,
+            listaInicial = emptyList(),
             onEditarClick = { persona ->
                 editarPersona(persona)
             },
@@ -92,29 +91,26 @@ class ReporteGeneralActivity : AppCompatActivity() {
         binding.etBuscar.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                val filtro = s?.toString()?.trim() ?: ""
-                if (filtro.isEmpty()) {
-                    cargarDatos()
-                } else {
-                    val resultados = personaDAO.filtrarPersonas(filtro)
-                    actualizarVistaConLista(resultados)
-                }
+                cargarDatos()
             }
             override fun afterTextChanged(s: Editable?) {}
         })
     }
 
     private fun cargarDatos() {
-        val personas = personaDAO.listarPersonas()
+        val filtro = binding.etBuscar.text?.toString()?.trim() ?: ""
+        val personas = if (filtro.isEmpty()) {
+            personaDAO.listarPersonas()
+        } else {
+            personaDAO.filtrarPersonas(filtro)
+        }
         actualizarVistaConLista(personas)
     }
 
     private fun actualizarVistaConLista(personas: List<Persona>) {
-        listaPersonas.clear()
-        listaPersonas.addAll(personas)
         adapter.actualizarLista(personas)
 
-        // Contador de registros
+        // Contador de registros en la vista activa (filtrada o completa)
         binding.tvContadorRegistros.text = getString(R.string.contador_registros, personas.size)
 
         // Estado vacío (Empty state)
@@ -149,15 +145,7 @@ class ReporteGeneralActivity : AppCompatActivity() {
             .setPositiveButton(R.string.dialog_eliminar_positivo) { _, _ ->
                 val filasEliminadas = personaDAO.eliminarPersona(persona.codigo)
                 if (filasEliminadas > 0) {
-                    adapter.eliminarItem(position)
-                    val totalActual = personaDAO.contarRegistros()
-                    binding.tvContadorRegistros.text =
-                        getString(R.string.contador_registros, totalActual)
-
-                    if (totalActual == 0) {
-                        binding.rvPersonas.visibility = View.GONE
-                        binding.layoutEmptyState.visibility = View.VISIBLE
-                    }
+                    cargarDatos()
 
                     Snackbar.make(
                         binding.reporteCoordinator,

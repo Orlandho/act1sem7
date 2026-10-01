@@ -15,6 +15,11 @@ class PersonaDAO(context: Context) {
 
     private val dbHelper: MySQLiteHelper = MySQLiteHelper(context)
     private var database: SQLiteDatabase? = null
+    
+    /**
+     * Lista en memoria según la propiedad UML 'lista: ArrayList<PersonaBean>' de las diapositivas 19 y 20.
+     */
+    var lista: ArrayList<Persona> = ArrayList()
 
     /**
      * Abre la conexión a la base de datos en modo lectura/escritura.
@@ -90,12 +95,19 @@ class PersonaDAO(context: Context) {
     }
 
     /**
+     * Sobrecarga según el modelamiento UML de la diapositiva 20: EliminarPersona(PersonaBean objPersonaBean).
+     */
+    fun eliminarPersona(persona: Persona): Int {
+        return eliminarPersona(persona.codigo)
+    }
+
+    /**
      * Obtiene el listado completo de personas registradas en SQLite (READ/LIST).
      * @return Lista de objetos Persona ordenados por código ascendente.
      */
     fun listarPersonas(): ArrayList<Persona> {
         open()
-        val lista = ArrayList<Persona>()
+        val resultado = ArrayList<Persona>()
         val cursor: Cursor? = database?.query(
             MySQLiteHelper.NOMBRETABLA,
             arrayOf(
@@ -118,7 +130,7 @@ class PersonaDAO(context: Context) {
             val idxDni = it.getColumnIndexOrThrow(MySQLiteHelper.COL_DNI)
 
             while (it.moveToNext()) {
-                lista.add(
+                resultado.add(
                     Persona(
                         codigo = it.getInt(idxCodigo),
                         nombre = it.getString(idxNombre),
@@ -128,8 +140,18 @@ class PersonaDAO(context: Context) {
                 )
             }
         }
-        return lista
+        this.lista = resultado
+        return resultado
     }
+
+    // --- Métodos de compatibilidad y alias textual del modelamiento UML (Diapositivas 19 y 20) ---
+    fun Insertar(persona: Persona): Long = insertarPersona(persona)
+    fun ListadoGeneral(): ArrayList<Persona> = listarPersonas()
+    fun InsertarPersona(persona: Persona): Long = insertarPersona(persona)
+    fun ModificarPersona(persona: Persona): Int = modificarPersona(persona)
+    fun EliminarPersona(persona: Persona): Int = eliminarPersona(persona)
+    fun EliminarPersona(codigo: Int): Int = eliminarPersona(codigo)
+    fun ListarPersonas(): ArrayList<Persona> = listarPersonas()
 
     /**
      * Filtra personas por nombre, apellido o DNI que coincidan con la búsqueda.

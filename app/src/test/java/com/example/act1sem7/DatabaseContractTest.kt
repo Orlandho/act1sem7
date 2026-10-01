@@ -19,6 +19,7 @@ class DatabaseContractTest {
         assertEquals("nombre", MySQLiteHelper.COL_NOMBRE)
         assertEquals("apellido", MySQLiteHelper.COL_APELLIDO)
         assertEquals("dni", MySQLiteHelper.COL_DNI)
+        assertEquals("La constante SQL debe coincidir con SQL_CREACION", MySQLiteHelper.SQL_CREACION, MySQLiteHelper.SQL)
     }
 
     @Test
@@ -30,5 +31,25 @@ class DatabaseContractTest {
         assertTrue("Debe definir campo nombre", sql.contains("nombre text not null"))
         assertTrue("Debe definir campo apellido", sql.contains("apellido text not null"))
         assertTrue("Debe definir campo dni", sql.contains("dni text not null"))
+    }
+
+    @Test
+    fun personaDAO_contieneMetodosRequeridosPorUML() {
+        val daoClass = com.example.act1sem7.database.PersonaDAO::class.java
+        val methodNames = daoClass.declaredMethods.map { it.name }.toSet()
+
+        // Métodos estándar Kotlin
+        assertTrue(methodNames.contains("insertarPersona"))
+        assertTrue(methodNames.contains("modificarPersona"))
+        assertTrue(methodNames.contains("eliminarPersona"))
+        assertTrue(methodNames.contains("listarPersonas"))
+
+        // Métodos alias textuales del UML de las diapositivas 19 y 20
+        assertTrue(methodNames.contains("InsertarPersona"))
+        assertTrue(methodNames.contains("ModificarPersona"))
+        assertTrue(methodNames.contains("EliminarPersona"))
+        assertTrue(methodNames.contains("ListarPersonas"))
+        assertTrue(methodNames.contains("Insertar"))
+        assertTrue(methodNames.contains("ListadoGeneral"))
     }
 }

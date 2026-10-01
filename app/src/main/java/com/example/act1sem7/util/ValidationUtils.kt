@@ -6,11 +6,13 @@ package com.example.act1sem7.util
  */
 object ValidationUtils {
 
-    private val DNI_REGEX = Regex("^[0-9]{8}$")
+    // En el Perú y en los ejemplos oficiales de la clase (Diapositiva 21: Jorge Jacinto 666666, Alberto Petrlik 1111132),
+    // los documentos de identidad abarcan de 6 a 8 dígitos numéricos.
+    private val DNI_REGEX = Regex("^[0-9]{6,8}$")
     private val NAME_REGEX = Regex("^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\\s]{2,50}$")
 
     /**
-     * Valida que el DNI contenga exactamente 8 dígitos numéricos peruanos.
+     * Valida que el DNI contenga entre 6 y 8 dígitos numéricos.
      */
     fun isValidDni(dni: String?): Boolean {
         if (dni.isNullOrBlank()) return false
@@ -49,7 +51,7 @@ object ValidationUtils {
 
         when {
             dni.isNullOrBlank() -> errors["dni"] = "El DNI es obligatorio"
-            !isValidDni(dni) -> errors["dni"] = "El DNI debe contener exactamente 8 dígitos numéricos"
+            !isValidDni(dni) -> errors["dni"] = "El DNI debe contener entre 6 y 8 dígitos numéricos"
         }
 
         return errors

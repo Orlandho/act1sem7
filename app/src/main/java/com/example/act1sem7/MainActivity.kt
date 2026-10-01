@@ -29,6 +29,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var personaDAO: PersonaDAO
     private var personaEnEdicion: Persona? = null
 
+    companion object {
+        private const val KEY_PERSONA_EN_EDICION = "key_persona_en_edicion"
+    }
+
     // Launcher para recibir la persona seleccionada a editar desde ReporteGeneralActivity
     private val launcherReporte = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -54,6 +58,25 @@ class MainActivity : AppCompatActivity() {
 
         configurarListeners()
         actualizarContador()
+
+        // Restaurar modo edición en caso de cambio de configuración (rotación de pantalla)
+        if (savedInstanceState != null) {
+            val personaGuardada = IntentCompat.getSerializableExtra(
+                Intent().putExtras(savedInstanceState),
+                KEY_PERSONA_EN_EDICION,
+                Persona::class.java
+            )
+            personaGuardada?.let {
+                activarModoEdicion(it, restaurarCamposTexto = false)
+            }
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        personaEnEdicion?.let {
+            outState.putSerializable(KEY_PERSONA_EN_EDICION, it)
+        }
     }
 
     override fun onResume() {
@@ -78,9 +101,13 @@ class MainActivity : AppCompatActivity() {
             launcherReporte.launch(intent)
         }
 
-        // Botón LIMPIAR
+        // Botón LIMPIAR / CANCELAR EDICIÓN
         binding.btnLimpiar.setOnClickListener {
-            limpiarFormulario()
+            if (personaEnEdicion != null) {
+                cancelarModoEdicion()
+            } else {
+                limpiarFormulario()
+            }
         }
 
         // Botón Cancelar del banner de edición
@@ -195,7 +222,7 @@ class MainActivity : AppCompatActivity() {
     /**
      * Activa el modo de edición cargando los datos de la persona en los campos del formulario.
      */
-    private fun activarModoEdicion(persona: Persona) {
+    private fun activarModoEdicion(persona: Persona, restaurarCamposTexto: Boolean = true) {
         personaEnEdicion = persona
         binding.cardModoEdicion.visibility = View.VISIBLE
         binding.tvModoEdicionDesc.text = "Modificando a: ${persona.nombreCompleto} (#${persona.codigo})"
@@ -203,11 +230,13 @@ class MainActivity : AppCompatActivity() {
         binding.btnGrabar.text = getString(R.string.btn_actualizar)
         binding.btnGrabar.setIconResource(R.drawable.ic_check)
 
-        binding.etNombre.setText(persona.nombre)
-        binding.etApellido.setText(persona.apellido)
-        binding.etDni.setText(persona.dni)
-        limpiarErrores()
-        binding.etNombre.requestFocus()
+        if (restaurarCamposTexto) {
+            binding.etNombre.setText(persona.nombre)
+            binding.etApellido.setText(persona.apellido)
+            binding.etDni.setText(persona.dni)
+            limpiarErrores()
+            binding.etNombre.requestFocus()
+        }
     }
 
     /**
